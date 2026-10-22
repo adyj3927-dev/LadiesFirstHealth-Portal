@@ -26,4 +26,3 @@ Deploying
 GitHub Pages: repo Settings → Pages, deploy from the main branch. The portal will be at https://<username>.github.io/ladies-first-health/volunteer-portal/.
 
 
-Claude finished the response
