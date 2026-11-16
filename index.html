@@ -149,7 +149,7 @@ a { color: inherit; }
 /* ---------- About: peony + ribbon ---------- */
 .about {
   position: relative;
-  background: url("assets/peony.jpg") center / cover no-repeat;
+  background: url("peony.jpg") center / cover no-repeat;
   padding-block: clamp(56px, 9vw, 120px) clamp(72px, 10vw, 140px);
   isolation: isolate;
 }
@@ -240,7 +240,7 @@ a { color: inherit; }
 .volunteer { background: var(--rose-deep); color: var(--cream); padding-block: clamp(80px, 11vw, 160px); position: relative; overflow: hidden; isolation: isolate; }
 .volunteer::before { /* echo of the ribbon shape */
   content: ""; position: absolute; z-index: -1; inset: 50% -10% auto -10%; height: 70%;
-  background: url("assets/wave.png") center / 100% 100% no-repeat; opacity: .08;
+  background: url("wave.png") center / 100% 100% no-repeat; opacity: .08;
 }
 .vol-inner { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 40px; }
 .volunteer h2 { margin: 0; font-family: var(--display); font-style: italic; font-weight: 600; font-size: clamp(48px, 7.5vw, 112px); line-height: .95; letter-spacing: -.025em; color: var(--cream); }
@@ -298,7 +298,7 @@ footer { background: var(--cream); padding-block: 56px 40px; }
 }
 .v-hero::before {
   content: ""; position: absolute; z-index: -1; left: -8%; right: -8%; top: 22%; height: 62%;
-  background: url("assets/wave.png") center / 100% 100% no-repeat; opacity: .9;
+  background: url("wave.png") center / 100% 100% no-repeat; opacity: .9;
 }
 .v-head {
   margin: 0; font-family: var(--display); font-style: italic; letter-spacing: -.03em; line-height: .92;
@@ -385,22 +385,22 @@ footer { background: var(--cream); padding-block: 56px 40px; }
 <main>
 <div data-view="home">
   <section class="hero" aria-label="Ladies First Health">
-    <div class="slide is-on"><img src="assets/hero-1.jpg" alt="Three women embracing, holding bunches of baby's breath, with the Ladies First swirl over them"></div>
-    <div class="slide"><img src="assets/hero-2.jpg" alt="An open hand holding a menstrual cup on a pink background, with the Ladies First swirl over it" loading="lazy"></div>
+    <div class="slide is-on"><img src="hero-1.jpg" alt="Three women embracing, holding bunches of baby's breath, with the Ladies First swirl over them"></div>
+    <div class="slide"><img src="hero-2.jpg" alt="An open hand holding a menstrual cup on a pink background, with the Ladies First swirl over it" loading="lazy"></div>
     <div class="hero-title">
       <div class="wrap">
-        <h1><img src="assets/wordmark.png" alt="ladiesfirst health" width="1554" height="194"></h1>
+        <h1><img src="wordmark.png" alt="ladiesfirst health" width="1554" height="194"></h1>
       </div>
     </div>
     <a class="pop" id="pop-event" href="#volunteer">
       <span class="pop-inner">
-        <img src="assets/heart-rose.png" alt="" width="260" height="246">
+        <img src="heart-rose.png" alt="" width="260" height="246">
         <span class="bubble">Period packing event<small>Sign up to help →</small></span>
       </span>
     </a>
     <a class="pop" id="pop-insta" href="https://www.instagram.com/ladiesfirsthealth/" target="_blank" rel="noopener">
       <span class="pop-inner">
-        <img src="assets/heart-pink.png" alt="" width="260" height="245">
+        <img src="heart-pink.png" alt="" width="260" height="245">
         <span class="bubble">Check out our Instagram<small>@ladiesfirsthealth</small></span>
       </span>
     </a>
@@ -412,7 +412,7 @@ footer { background: var(--cream); padding-block: 56px 40px; }
 
   <section class="about" id="about">
     <div class="ribbon">
-      <img class="wave" src="assets/wave.png" alt="">
+      <img class="wave" src="wave.png" alt="">
       <div class="wrap">
         <p class="eyebrow">Women's Health Collective · UMass Amherst</p>
         <p class="quote">“Healthcare is her <span class="accent">right</span>, not her reward.”</p>
@@ -426,9 +426,9 @@ footer { background: var(--cream); padding-block: 56px 40px; }
   <section class="goals" id="goals" aria-labelledby="goals-h">
     <div class="wrap">
       <div class="goals-top">
-        <h2 id="goals-h"><img src="assets/goals-heading.png" alt="our goals" width="917" height="679" loading="lazy"></h2>
+        <h2 id="goals-h"><img src="goals-heading.png" alt="our goals" width="917" height="679" loading="lazy"></h2>
         <figure class="note">
-          <img src="assets/goals-note.png" alt="" width="946" height="747" loading="lazy">
+          <img src="goals-note.png" alt="" width="946" height="747" loading="lazy">
           <p>Through educational resources, workshops, care packages, and opportunities for connection, we aim to help students feel informed, supported, and empowered to navigate their health.</p>
         </figure>
       </div>
@@ -441,7 +441,7 @@ footer { background: var(--cream); padding-block: 56px 40px; }
   <section class="initiatives" id="initiatives" aria-labelledby="init-h">
     <div class="wrap init-grid">
       <figure class="init-photo">
-        <img src="assets/lily.jpg" alt="A pink lily seen from below, with the Ladies First swirl in a circle at its center" loading="lazy">
+        <img src="lily.jpg" alt="A pink lily seen from below, with the Ladies First swirl in a circle at its center" loading="lazy">
       </figure>
       <div>
         <h2 id="init-h">Our <em>Initiatives</em></h2>
@@ -566,7 +566,7 @@ footer { background: var(--cream); padding-block: 56px 40px; }
       </form>
     </div>
     <figure class="v-photo">
-      <img src="assets/meeting.jpg" alt="Ladies First members seated at classroom desks, smiling and listening during a club meeting" width="1175" height="764" loading="lazy">
+      <img src="meeting.jpg" alt="Ladies First members seated at classroom desks, smiling and listening during a club meeting" width="1175" height="764" loading="lazy">
     </figure>
   </section>
 </div>
@@ -813,7 +813,7 @@ window.LF_CONFIG = {
       cx.fillStyle = 'rgba(252,236,228,.28)'; cx.fillRect(0, 0, c.width, c.height);
       tex = c; render(performance.now() / 1000);
     };
-    img.src = 'assets/peony.jpg';
+    img.src = 'peony.jpg';
     layout(); render(reduce ? 0 : 4);
     let rw = W;
     window.addEventListener('resize', () => { if (Math.abs(cv.getBoundingClientRect().width - rw) > 2) { layout(); rw = W; render(performance.now() / 1000); } });
