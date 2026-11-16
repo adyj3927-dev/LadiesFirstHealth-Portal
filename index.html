@@ -1,0 +1,911 @@
+<title>Ladies First Health</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,500;1,600;1,700;1,800&family=Instrument+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: full-bleed photographic bands that flow into each other —
+   rotating hero → peony with a cream ribbon → scrapbook goals → peach initiatives
+   beside a sticky lily → rose volunteer band → cream footer.
+   Single deliberate light palette taken from the club's own artwork. */
+:root {
+  --paper: #FFF8F1;      /* page ground */
+  --cream: #FBF1E4;      /* nav + ribbon, from the Figma nav bar */
+  --peach: #FEE7D7;      /* initiatives band, same as goals so they flow as one */
+  --blush: #F6E3E2;      /* status messages */
+  --goals-bg: #FEE7D7;   /* matches the goals artwork */
+  --petal: #FFD5C7;      /* wordmark pink */
+  --rose: #C27D82;       /* "our goals" dusty rose */
+  --rose-deep: #8A4A52;  /* volunteer band */
+  --ink: #3B2328;        /* text: plum-brown, never pure black */
+  --ink-soft: #6E5257;
+  --line: rgba(194, 125, 130, .28);
+
+  --display: "Playfair Display", "Didot", "Bodoni 72", Georgia, serif;
+  --body: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  --wrap: 1240px;
+  --nav-h: 68px;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + env(safe-area-inset-top, 0px)); }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--cream);
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--rose-deep); outline-offset: 3px; border-radius: 4px; }
+
+.wrap {
+  width: 100%;
+  max-width: calc(var(--wrap) + 96px);
+  margin-inline: auto;
+  padding-left: max(var(--gutter-l), clamp(16px, 4vw, 48px));
+  padding-right: max(var(--gutter-r), clamp(16px, 4vw, 48px));
+}
+
+/* ---------- Nav ---------- */
+.nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
+  background: color-mix(in srgb, var(--cream) 94%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.nav .wrap { height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { display: inline-flex; align-items: baseline; gap: 2px; text-decoration: none; line-height: 1; }
+.brand .lf { font-family: var(--display); font-style: italic; font-weight: 700; font-size: 25px; color: var(--rose); letter-spacing: -.01em; }
+.brand .h { font-family: var(--body); font-weight: 700; font-size: 23px; color: var(--ink); letter-spacing: -.02em; }
+.links { display: flex; align-items: center; gap: clamp(20px, 3vw, 40px); list-style: none; margin: 0; padding: 0; }
+.links a { text-decoration: none; font-size: 15px; font-weight: 500; color: var(--ink-soft); padding-block: 6px; position: relative; transition: color .2s; }
+.links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .3s ease; }
+.links a:hover, .links a[aria-current="page"] { color: var(--ink); }
+.links a:hover::after, .links a[aria-current="page"]::after { transform: scaleX(1); }
+.links .pill { border: 1px solid var(--rose); color: var(--rose-deep); padding: 9px 18px; border-radius: 999px; transition: background .25s, color .25s; }
+.links .pill::after { display: none; }
+.links .pill:hover { background: var(--rose-deep); border-color: var(--rose-deep); color: var(--cream); }
+.menu-btn { display: none; background: none; border: 0; padding: 8px; margin-right: -8px; cursor: pointer; color: var(--ink); }
+.menu-btn span { display: block; width: 24px; height: 1.5px; background: currentColor; margin: 6px 0; transition: transform .3s, opacity .2s; }
+.menu-btn[aria-expanded="true"] span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+.menu-btn[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.menu-btn[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+@media (max-width: 720px) {
+  .menu-btn { display: block; }
+  .links {
+    position: absolute; top: 100%; left: 0; right: 0;
+    flex-direction: column; align-items: flex-start; gap: 4px;
+    background: var(--cream); border-bottom: 1px solid var(--line);
+    padding: 12px var(--gutter-r) 24px var(--gutter-l);
+  }
+  .links[data-open="false"] { display: none; }
+  .links a { font-size: 20px; font-family: var(--display); font-style: italic; color: var(--ink); }
+  .links .pill { margin-top: 8px; font-family: var(--body); font-style: normal; font-size: 15px; }
+}
+
+/* ---------- Hero ---------- */
+.hero { position: relative; height: clamp(440px, 82vh, 860px); overflow: hidden; background: #6b4a4f; }
+.slide {
+  position: absolute; inset: 0; opacity: 0;
+  transition: opacity 1.6s ease-in-out;
+}
+.slide img { width: 100%; height: 100%; object-fit: cover; object-position: center 45%; transform: scale(1.06); transition: transform 7.5s ease-out; }
+.slide.is-on { opacity: 1; }
+.slide.is-on img { transform: scale(1); }
+.hero::after {
+  content: ""; position: absolute; inset: auto 0 0; height: 45%;
+  background: linear-gradient(to top, rgba(59, 35, 40, .55), rgba(59, 35, 40, 0));
+  pointer-events: none;
+}
+.hero-title {
+  position: absolute; z-index: 2; left: 0; right: 0; bottom: clamp(28px, 6vh, 64px);
+}
+.hero-title h1 { margin: 0; }
+.hero-title img { width: clamp(260px, 56vw, 820px); height: auto; filter: drop-shadow(0 2px 18px rgba(59,35,40,.25)); animation: rise 1.4s cubic-bezier(.2,.7,.2,1) both .2s; }
+.dots { position: absolute; z-index: 3; right: max(var(--gutter-r), clamp(16px, 4vw, 48px)); bottom: clamp(32px, 6.5vh, 70px); display: flex; gap: 10px; }
+.dots button { width: 9px; height: 9px; padding: 0; border-radius: 50%; border: 1px solid rgba(255,248,241,.9); background: transparent; cursor: pointer; transition: background .3s, transform .3s; }
+.dots button[aria-current="true"] { background: rgba(255,248,241,.95); transform: scale(1.15); }
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- Bouncing hearts with message bubbles ---------- */
+.pop {
+  position: absolute; z-index: 4; left: 0; top: 0;
+  display: flex; align-items: flex-end; gap: 0;
+  text-decoration: none; color: var(--ink);
+  will-change: transform; opacity: 0;
+}
+.pop.is-in { opacity: 1; transition: opacity .5s ease; }
+.pop .pop-inner { display: flex; align-items: flex-end; animation: popin .7s cubic-bezier(.3,1.6,.5,1) both; animation-play-state: paused; }
+.pop.is-in .pop-inner { animation-play-state: running; }
+.pop img { width: clamp(58px, 6vw, 92px); height: auto; filter: drop-shadow(0 6px 14px rgba(59,35,40,.25)); animation: bob 2.6s ease-in-out infinite; flex: none; }
+.pop:nth-of-type(2) img { animation-delay: -1.3s; }
+.bubble {
+  position: relative; margin: 0 0 clamp(44px, 4.6vw, 70px) -10px;
+  background: #FFFDFB; color: var(--ink);
+  font-family: var(--body); font-weight: 600; font-size: clamp(13px, 1.05vw, 15px); line-height: 1.25;
+  padding: 10px 15px; border-radius: 20px 20px 20px 6px; white-space: nowrap;
+  box-shadow: 0 8px 22px rgba(59,35,40,.18);
+  transition: transform .25s ease, background .25s ease;
+}
+.bubble small { display: block; font-weight: 500; font-size: .82em; color: var(--rose-deep); margin-top: 2px; }
+.pop:hover .bubble, .pop:focus-visible .bubble { transform: translateY(-3px) scale(1.04); background: #fff; }
+.pop:hover img { animation-duration: .9s; }
+@keyframes bob { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-8px) rotate(4deg); } }
+@keyframes popin { from { transform: scale(.2); } to { transform: none; } }
+
+/* ---------- About: peony + ribbon ---------- */
+.about {
+  position: relative;
+  background: url("assets/peony.jpg") center / cover no-repeat;
+  padding-block: clamp(56px, 9vw, 120px) clamp(72px, 10vw, 140px);
+  isolation: isolate;
+}
+.about::before { /* soft veil so text stays legible on the petals */
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(255,248,241,.35) 0%, rgba(255,248,241,0) 35%, rgba(255,248,241,.0) 55%, rgba(255,248,241,.7) 100%);
+}
+.ribbon { position: relative; text-align: center; padding-block: clamp(70px, 9vw, 130px); }
+.ribbon > img.wave {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; z-index: -1;
+  filter: drop-shadow(0 18px 40px rgba(138, 74, 82, .10));
+}
+.eyebrow { font-family: var(--body); font-size: 13px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--rose-deep); margin: 0 0 18px; }
+.quote {
+  font-family: var(--display); font-style: italic; font-weight: 500;
+  font-size: clamp(30px, 4.6vw, 64px); line-height: 1.12; letter-spacing: -.015em;
+  color: var(--ink); margin: 0 auto; max-width: 22ch; text-wrap: balance;
+}
+.quote .accent { color: var(--rose); font-weight: 700; }
+.mission {
+  margin-top: clamp(56px, 8vw, 110px);
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px;
+}
+.mission p {
+  grid-column: 1; margin: 0;
+  font-size: clamp(19px, 1.7vw, 23px); line-height: 1.6; max-width: 34ch;
+  color: var(--ink);
+  background: rgba(255, 248, 241, .72);
+  backdrop-filter: blur(6px);
+  padding: clamp(24px, 3vw, 40px);
+  border-radius: 2px 48px 2px 48px;
+}
+.mission strong { font-weight: 600; color: var(--rose-deep); }
+
+/* ---------- Goals (scrapbook layout from the club's artwork) ---------- */
+.goals { background: var(--goals-bg); padding-block: clamp(56px, 8vw, 120px) clamp(48px, 6vw, 90px); overflow: hidden; }
+.goals-top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 64px); align-items: center; }
+.goals h2 { margin: 0; }
+.goals h2 img { width: min(100%, 560px); height: auto; }
+.note { position: relative; margin: 0; container-type: inline-size; max-width: 600px; justify-self: end; width: 100%; }
+.note > img { width: 100%; height: auto; }
+.note p {
+  position: absolute; left: 11.5%; top: 18%; width: 57%; height: 59%;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  margin: 0; transform: rotate(2.4deg);
+  font-family: var(--body); font-weight: 500; color: var(--ink);
+  font-size: clamp(12px, 3.85cqw, 23px); line-height: 1.38; text-wrap: balance;
+}
+.goals-lede {
+  margin: clamp(40px, 6vw, 80px) auto 0; max-width: 40ch; text-align: center;
+  font-family: var(--body); font-weight: 500; color: var(--ink);
+  font-size: clamp(21px, 2.5vw, 36px); line-height: 1.32; letter-spacing: -.01em; text-wrap: balance;
+}
+
+/* ---------- Peony band: full-width looping bloom ---------- */
+.peony-band {
+  position: relative; height: clamp(300px, 40vw, 600px);
+  background: linear-gradient(180deg, var(--goals-bg) 0%, #FBDDD6 50%, var(--peach) 100%);
+  overflow: hidden;
+}
+.peony-band canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%);
+          mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%);
+}
+
+/* ---------- Initiatives ---------- */
+.initiatives { background: var(--peach); padding-block: clamp(72px, 10vw, 150px); }
+.init-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(40px, 7vw, 110px); align-items: start; }
+.init-photo { position: sticky; top: calc(var(--nav-h) + env(safe-area-inset-top, 0px) + 32px); margin: 0; }
+.init-photo img { width: 100%; aspect-ratio: 952 / 1402; object-fit: cover; border-radius: 32px; }
+.init-photo figcaption { margin-top: 18px; font-family: var(--display); font-style: italic; font-size: 18px; color: var(--ink-soft); }
+.initiatives h2 {
+  font-family: var(--display); font-style: italic; font-weight: 600;
+  font-size: clamp(42px, 5.2vw, 76px); line-height: 1; letter-spacing: -.02em; margin: 0 0 14px; color: var(--ink);
+}
+.initiatives h2 em { color: var(--rose); font-weight: 700; }
+.lede { margin: 0 0 clamp(36px, 5vw, 60px); color: var(--ink-soft); font-size: 18px; max-width: 46ch; }
+.areas { list-style: none; margin: 0; padding: 0; }
+.area { padding-block: 28px; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+.area:last-child { border-bottom: 1px solid var(--line); }
+.area h3 { margin: 0; font-family: var(--display); font-style: italic; font-weight: 600; font-size: clamp(23px, 2.1vw, 29px); line-height: 1.2; color: var(--rose-deep); }
+.area ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.area li { position: relative; padding-left: 22px; color: var(--ink); max-width: 58ch; }
+.area li::before { content: ""; position: absolute; left: 2px; top: .7em; width: 7px; height: 7px; border-radius: 50% 50% 50% 0; background: var(--rose); transform: rotate(-45deg); }
+
+/* ---------- Volunteer ---------- */
+.volunteer { background: var(--rose-deep); color: var(--cream); padding-block: clamp(80px, 11vw, 160px); position: relative; overflow: hidden; isolation: isolate; }
+.volunteer::before { /* echo of the ribbon shape */
+  content: ""; position: absolute; z-index: -1; inset: 50% -10% auto -10%; height: 70%;
+  background: url("assets/wave.png") center / 100% 100% no-repeat; opacity: .08;
+}
+.vol-inner { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 40px; }
+.volunteer h2 { margin: 0; font-family: var(--display); font-style: italic; font-weight: 600; font-size: clamp(48px, 7.5vw, 112px); line-height: .95; letter-spacing: -.025em; color: var(--cream); }
+.volunteer h2 em { color: var(--petal); font-weight: 800; }
+.vol-copy { max-width: 38ch; min-width: 0; }
+.vol-copy p { margin: 0 0 28px; font-size: 19px; line-height: 1.55; color: rgba(251, 241, 228, .9); }
+.btn {
+  display: inline-flex; align-items: center; gap: 12px;
+  background: var(--cream); color: var(--rose-deep); text-decoration: none;
+  font-weight: 600; font-size: 16px; padding: 16px 28px; border-radius: 999px;
+  transition: background .25s, color .25s, gap .25s;
+}
+.btn:hover { background: var(--petal); gap: 16px; }
+.btn svg { width: 18px; height: 18px; }
+
+/* ---------- Footer ---------- */
+footer { background: var(--cream); padding-block: 56px 40px; }
+.foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 32px; align-items: flex-start; }
+.foot .brand .lf { font-size: 34px; }
+.foot .brand .h { font-size: 31px; }
+.foot p { margin: 12px 0 0; color: var(--ink-soft); font-size: 15px; max-width: 36ch; }
+.foot nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 28px; flex-wrap: wrap; }
+.foot nav a { text-decoration: none; font-size: 15px; color: var(--ink-soft); }
+.foot nav a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+.fine { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-soft); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .goals-top { grid-template-columns: minmax(0, 1fr); }
+  .goals h2 img { width: min(78%, 420px); }
+  .note { justify-self: center; }
+  .init-grid { grid-template-columns: minmax(0, 1fr); }
+  .init-photo { position: relative; top: 0; max-width: 460px; }
+  .init-photo img { aspect-ratio: 4 / 5; }
+  .mission { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .hero { height: clamp(420px, 70vh, 620px); }
+  .slide img { object-position: center 40%; }
+  .ribbon { padding-block: 110px 120px; }
+  .ribbon .quote { max-width: 15ch; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .slide, .slide img, .hero-title img { transition: none !important; animation: none !important; transform: none !important; }
+}
+
+/* ---------- Volunteer page ---------- */
+:root { --wall: #BAAEA2; --field: #FFFFFF; --field-line: #E7CDD1; --panel: #FFF6F3; --error: #A23B3B; }
+.v-hero {
+  position: relative; overflow: hidden; isolation: isolate; text-align: center;
+  background: linear-gradient(180deg, #FBE1DC 0%, var(--goals-bg) 55%, var(--paper) 100%);
+  padding-block: clamp(96px, 14vw, 200px) clamp(80px, 11vw, 160px);
+}
+.v-hero::before {
+  content: ""; position: absolute; z-index: -1; left: -8%; right: -8%; top: 22%; height: 62%;
+  background: url("assets/wave.png") center / 100% 100% no-repeat; opacity: .9;
+}
+.v-head {
+  margin: 0; font-family: var(--display); font-style: italic; letter-spacing: -.03em; line-height: .92;
+  font-size: clamp(60px, 11vw, 176px); font-weight: 600; color: var(--ink);
+  animation: rise 1.2s cubic-bezier(.2,.7,.2,1) both;
+}
+.v-head em { display: block; font-weight: 800; color: var(--rose); }
+.v-hero .eyebrow { margin-bottom: clamp(18px, 2.4vw, 32px); }
+.v-form-sec:has(.v-photo) { padding-bottom: 0; }
+.v-photo { margin: clamp(8px, 2vw, 24px) 0 0; position: relative; }
+.v-photo img {
+  width: 100%; height: clamp(360px, 52vw, 760px); object-fit: cover; object-position: center 40%;
+  opacity: .92; filter: saturate(.85);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.35) 18%, #000 48%, #000 78%, transparent 100%);
+          mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.35) 18%, #000 48%, #000 78%, transparent 100%);
+}
+@keyframes settle { from { opacity: .4; transform: scale(1.03); } to { opacity: 1; transform: none; } }
+
+.v-form-sec { background: var(--paper); padding-block: clamp(64px, 9vw, 130px); }
+.v-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(40px, 7vw, 110px); align-items: start; }
+.v-intro h2 { margin: 0 0 22px; font-family: var(--display); font-style: italic; font-weight: 600; font-size: clamp(40px, 4.6vw, 64px); line-height: 1.02; letter-spacing: -.02em; }
+.v-intro h2 em { color: var(--rose); font-weight: 700; }
+.v-intro > p:not(.eyebrow) { margin: 0; font-size: 18px; color: var(--ink-soft); max-width: 40ch; }
+.v-roles { list-style: none; margin: 36px 0 0; padding: 0; border-top: 1px solid var(--line); }
+.v-roles li { padding-block: 14px; border-bottom: 1px solid var(--line); font-family: var(--display); font-style: italic; font-size: 21px; color: var(--rose-deep); }
+
+.v-form { background: var(--panel); border: 1px solid var(--line); border-radius: 32px; padding: clamp(24px, 4vw, 48px); display: grid; gap: 26px; }
+.v-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+.field { display: grid; gap: 8px; min-width: 0; }
+.field label { font-weight: 600; font-size: 16px; color: var(--ink); }
+.field .hint { margin: -4px 0 0; font-size: 14px; color: var(--ink-soft); }
+.field input, .field select {
+  width: 100%; height: 56px; padding: 0 18px; font: inherit; font-size: 17px; color: var(--ink);
+  background: var(--field); border: 1px solid var(--field-line); border-radius: 18px;
+  transition: border-color .2s, box-shadow .2s; appearance: none; -webkit-appearance: none;
+}
+.field select {
+  padding-right: 48px; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233B2328' stroke-width='1.6'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 18px center; background-size: 18px;
+}
+.field select:invalid { color: var(--ink-soft); }
+.field input:focus, .field select:focus { outline: none; border-color: var(--rose); box-shadow: 0 0 0 4px rgba(194, 125, 130, .18); }
+.field [aria-invalid="true"] { border-color: var(--error); }
+.field .err { margin: 0; font-size: 14px; color: var(--error); }
+.v-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding-top: 4px; }
+.v-submit {
+  border: 0; cursor: pointer; font: inherit; font-weight: 600; font-size: 17px;
+  background: var(--rose-deep); color: var(--cream); padding: 17px 34px; border-radius: 999px;
+  transition: background .25s, transform .2s;
+}
+.v-submit:hover { background: #733C44; }
+.v-submit:active { transform: translateY(1px); }
+.v-status { margin: 0; padding: 16px 20px; border-radius: 16px; background: var(--blush); color: var(--ink); font-size: 15px; }
+
+@media (max-width: 900px) {
+  .v-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .v-row { grid-template-columns: minmax(0, 1fr); }
+  .v-submit { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .v-head, .pop, .pop img { animation: none !important; }
+}
+</style>
+
+<header class="nav" id="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Ladies First Health, home">
+      <span class="lf">ladiesfirst</span><span class="h">health</span>
+    </a>
+    <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="links" id="nav-links" data-open="false">
+      <li><a href="#top" aria-current="page">Home</a></li>
+      <li><a href="#about">About Us</a></li>
+      <li><a class="pill" href="#volunteer">Volunteer With Us</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+<div data-view="home">
+  <section class="hero" aria-label="Ladies First Health">
+    <div class="slide is-on"><img src="assets/hero-1.jpg" alt="Three women embracing, holding bunches of baby's breath, with the Ladies First swirl over them"></div>
+    <div class="slide"><img src="assets/hero-2.jpg" alt="An open hand holding a menstrual cup on a pink background, with the Ladies First swirl over it" loading="lazy"></div>
+    <div class="hero-title">
+      <div class="wrap">
+        <h1><img src="assets/wordmark.png" alt="ladiesfirst health" width="1554" height="194"></h1>
+      </div>
+    </div>
+    <a class="pop" id="pop-event" href="#volunteer">
+      <span class="pop-inner">
+        <img src="assets/heart-rose.png" alt="" width="260" height="246">
+        <span class="bubble">Period packing event<small>Sign up to help →</small></span>
+      </span>
+    </a>
+    <a class="pop" id="pop-insta" href="https://www.instagram.com/ladiesfirsthealth/" target="_blank" rel="noopener">
+      <span class="pop-inner">
+        <img src="assets/heart-pink.png" alt="" width="260" height="245">
+        <span class="bubble">Check out our Instagram<small>@ladiesfirsthealth</small></span>
+      </span>
+    </a>
+    <div class="dots" role="group" aria-label="Choose photo">
+      <button type="button" aria-label="Photo 1" aria-current="true"></button>
+      <button type="button" aria-label="Photo 2" aria-current="false"></button>
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <div class="ribbon">
+      <img class="wave" src="assets/wave.png" alt="">
+      <div class="wrap">
+        <p class="eyebrow">Women's Health Collective · UMass Amherst</p>
+        <p class="quote">“Healthcare is her <span class="accent">right</span>, not her reward.”</p>
+      </div>
+    </div>
+    <div class="wrap mission">
+      <p>Ladies First advances <strong>reproductive and hormonal health equity</strong> for women at UMass Amherst. We provide community-driven education, peer support, and advocacy around conditions that go underdiagnosed and underserved, including PCOS and PMDD.</p>
+    </div>
+  </section>
+
+  <section class="goals" id="goals" aria-labelledby="goals-h">
+    <div class="wrap">
+      <div class="goals-top">
+        <h2 id="goals-h"><img src="assets/goals-heading.png" alt="our goals" width="917" height="679" loading="lazy"></h2>
+        <figure class="note">
+          <img src="assets/goals-note.png" alt="" width="946" height="747" loading="lazy">
+          <p>Through educational resources, workshops, care packages, and opportunities for connection, we aim to help students feel informed, supported, and empowered to navigate their health.</p>
+        </figure>
+      </div>
+      <p class="goals-lede">We work to raise awareness about underrecognized and underdiagnosed conditions, including Polycystic Ovary Syndrome (PCOS) and Premenstrual Dysphoric Disorder (PMDD), through community-driven education, peer support, and advocacy.</p>
+    </div>
+  </section>
+
+  <div class="peony-band" aria-hidden="true"><canvas id="peonies"></canvas></div>
+
+  <section class="initiatives" id="initiatives" aria-labelledby="init-h">
+    <div class="wrap init-grid">
+      <figure class="init-photo">
+        <img src="assets/lily.jpg" alt="A pink lily seen from below, with the Ladies First swirl in a circle at its center" loading="lazy">
+      </figure>
+      <div>
+        <h2 id="init-h">Our <em>Initiatives</em></h2>
+        <p class="lede">What we're building this year, from the classroom to the tabling table.</p>
+        <ul class="areas">
+          <li class="area">
+            <h3>Health Education and Awareness</h3>
+            <ul>
+              <li>Raise awareness about PCOS, PMDD, and other underrecognized reproductive and hormonal health conditions.</li>
+              <li>Share accessible educational information with students.</li>
+              <li>Help address the dismissal and underdiagnosis of these conditions.</li>
+            </ul>
+          </li>
+          <li class="area">
+            <h3>Health Navigation and Resources</h3>
+            <ul>
+              <li>Develop health navigation guides that point students toward doctors, testing, and support resources.</li>
+              <li>Provide educational materials that help students better understand their health.</li>
+            </ul>
+          </li>
+          <li class="area">
+            <h3>Care Packages</h3>
+            <ul>
+              <li>Prepare care packages containing items such as a heating pad, PCOS and PMDD information guide, spearmint tea, and a supportive note.</li>
+            </ul>
+          </li>
+          <li class="area">
+            <h3>Workshops and Panels</h3>
+            <ul>
+              <li>Organize educational sessions involving clinicians, researchers, and advocates with lived experience.</li>
+            </ul>
+          </li>
+          <li class="area">
+            <h3>Peer Support and Community</h3>
+            <ul>
+              <li>Create opportunities for students to connect, share experiences, and support one another through peer support circles and community events.</li>
+            </ul>
+          </li>
+          <li class="area">
+            <h3>Campus Outreach and Advocacy</h3>
+            <ul>
+              <li>Participate in campus events and tabling opportunities to raise awareness and connect with students.</li>
+            </ul>
+          </li>
+          <li class="area">
+            <h3>Future Research Support</h3>
+            <ul>
+              <li>Explore opportunities to provide financial and in-kind support to research labs studying PCOS and PMDD.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="volunteer" id="get-involved" aria-labelledby="vol-h">
+    <div class="wrap vol-inner">
+      <h2 id="vol-h">Volunteer<br><em>with us.</em></h2>
+      <div class="vol-copy">
+        <p>Help pack care packages, run workshops, and table at campus events. Sign up once and we'll reach out when there's a shift that fits your schedule.</p>
+        <a class="btn" href="#volunteer">Sign up to volunteer
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div data-view="volunteer" hidden>
+  <section class="v-hero" aria-labelledby="v-title">
+    <div class="wrap">
+      <p class="eyebrow">Ladies First · UMass Amherst</p>
+      <h1 class="v-head" id="v-title">Volunteer <em>with us.</em></h1>
+    </div>
+  </section>
+
+  <section class="v-form-sec" aria-labelledby="v-form-h">
+    <div class="wrap v-grid">
+      <div class="v-intro">
+        <p class="eyebrow">Join the collective</p>
+        <h2 id="v-form-h">Become a <em>volunteer</em></h2>
+        <p>Volunteers help pack care packages, set up workshops and panels, and table at campus events. Leave your details and we'll reach out when there's a shift that fits your schedule.</p>
+        <ul class="v-roles">
+          <li>Care packages</li>
+          <li>Workshops and panels</li>
+          <li>Campus outreach and tabling</li>
+          <li>Peer support events</li>
+        </ul>
+      </div>
+
+      <form class="v-form" id="volunteer-form" novalidate>
+        <div class="v-row">
+          <div class="field">
+            <label for="first-name">First name</label>
+            <input id="first-name" name="first_name" type="text" autocomplete="given-name" required>
+          </div>
+          <div class="field">
+            <label for="last-name">Last name</label>
+            <input id="last-name" name="last_name" type="text" autocomplete="family-name" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <p class="hint" id="email-hint">UMass email preferred</p>
+          <input id="email" name="email" type="email" autocomplete="email" aria-describedby="email-hint" required>
+        </div>
+        <div class="field">
+          <label for="year">Current year</label>
+          <select id="year" name="year" required>
+            <option value="" disabled selected>Choose your year</option>
+            <option>First-year</option>
+            <option>Sophomore</option>
+            <option>Junior</option>
+            <option>Senior</option>
+            <option>Graduate student</option>
+          </select>
+        </div>
+        <div class="v-actions">
+          <button class="v-submit" type="submit">Sign up to volunteer</button>
+        </div>
+        <p class="v-status" id="v-status" role="status" hidden></p>
+      </form>
+    </div>
+    <figure class="v-photo">
+      <img src="assets/meeting.jpg" alt="Ladies First members seated at classroom desks, smiling and listening during a club meeting" width="1175" height="764" loading="lazy">
+    </figure>
+  </section>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="brand" href="#top" aria-label="Ladies First Health, back to top"><span class="lf">ladiesfirst</span><span class="h">health</span></a>
+        <p>Ladies First: Women's Health Collective, a student organization at UMass Amherst.</p>
+      </div>
+      <nav aria-label="Footer">
+        <ul>
+          <li><a href="#top">Home</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#initiatives">Initiatives</a></li>
+          <li><a href="#volunteer">Volunteer With Us</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="fine">
+      <span>© 2026 Ladies First Health</span>
+      <span>Healthcare is her right, not her reward.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ---- Site settings: edit these, nothing else needs to change ----
+window.LF_CONFIG = {
+  supabaseUrl: 'https://tarsdqlevxccnjbniiia.supabase.co',          // e.g. https://abcdefgh.supabase.co
+  supabaseKey: 'sb_publishable_bLLBPq1khWq2bOR4aTWVAw_bY6k8d-H',     // the anon / publishable key (safe to be public)
+  instagramUrl: 'https://www.instagram.com/ladiesfirsthealth',
+  eventUrl: 'https://forms.gle/KmKUZmNR8Am5x94X7'                     // where the "Period packing event" heart goes
+};
+</script>
+<script>
+(() => {
+  // Hero crossfade
+  const slides = [...document.querySelectorAll('.slide')];
+  const dots = [...document.querySelectorAll('.dots button')];
+  let i = 0, timer;
+  const show = (n) => {
+    i = (n + slides.length) % slides.length;
+    slides.forEach((s, k) => s.classList.toggle('is-on', k === i));
+    dots.forEach((d, k) => d.setAttribute('aria-current', k === i ? 'true' : 'false'));
+  };
+  const start = () => { clearInterval(timer); timer = setInterval(() => show(i + 1), 6000); };
+  dots.forEach((d, k) => d.addEventListener('click', () => { show(k); start(); }));
+  document.addEventListener('visibilitychange', () => document.hidden ? clearInterval(timer) : start());
+  start();
+
+  // Bouncing hearts: drift around the hero, bounce off its edges, pause on hover
+  const hero = document.querySelector('.hero');
+  const pops = [...document.querySelectorAll('.pop')];
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const state = pops.map((el, k) => ({
+    el, x: 0, y: 0, vx: (k ? -1 : 1) * 34, vy: (k ? 1 : -1) * 26, paused: false,
+    start: k ? [0.66, 0.42] : [0.07, 0.14]
+  }));
+  const bounds = () => {
+    const w = hero.clientWidth, h = hero.clientHeight;
+    return { w, h, maxY: h * 0.62 };   // keep clear of the wordmark at the bottom
+  };
+  const place = (s) => { s.el.style.transform = `translate3d(${s.x}px, ${s.y}px, 0)`; };
+  const init = () => {
+    const b = bounds();
+    state.forEach(s => {
+      const r = s.el.getBoundingClientRect();
+      s.x = Math.min(b.w * s.start[0], b.w - r.width - 12);
+      s.y = Math.min(b.h * s.start[1], b.maxY - r.height);
+      place(s);
+    });
+  };
+  init();
+  pops.forEach((el, k) => {
+    const s = state[k];
+    ['mouseenter', 'focus'].forEach(ev => el.addEventListener(ev, () => s.paused = true));
+    ['mouseleave', 'blur'].forEach(ev => el.addEventListener(ev, () => s.paused = false));
+    setTimeout(() => el.classList.add('is-in'), 900 + k * 700);
+  });
+  let last = performance.now(), visible = true;
+  if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(hero);
+  const tick = (now) => {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    if (visible && !reduce) {
+      const b = bounds();
+      state.forEach(s => {
+        if (s.paused) return;
+        const w = s.el.offsetWidth, h = s.el.offsetHeight;
+        s.x += s.vx * dt; s.y += s.vy * dt;
+        if (s.x < 8) { s.x = 8; s.vx = Math.abs(s.vx); }
+        if (s.x > b.w - w - 8) { s.x = b.w - w - 8; s.vx = -Math.abs(s.vx); }
+        if (s.y < 12) { s.y = 12; s.vy = Math.abs(s.vy); }
+        if (s.y > b.maxY - h) { s.y = Math.max(12, b.maxY - h); s.vy = -Math.abs(s.vy); }
+        place(s);
+      });
+    }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+  window.addEventListener('resize', init);
+
+  // Peony band: a row of peonies that bloom, close and bloom again.
+  // Every petal is clipped from the peony photo so it keeps the real silky texture.
+  (() => {
+    const cv = document.getElementById('peonies');
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const TAU = Math.PI * 2;
+    const rng = (seed) => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    const clamp = (v) => v < 0 ? 0 : v > 1 ? 1 : v;
+    const eio = (t) => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+    let tex = null, W = 0, H = 0, dpr = 1, flowers = [];
+
+    const LAYERS = [
+      { n: 8, len: 1.00, w: .60, d: 0   },
+      { n: 8, len: .86,  w: .58, d: .07 },
+      { n: 7, len: .71,  w: .56, d: .15 },
+      { n: 7, len: .56,  w: .54, d: .24 },
+      { n: 6, len: .42,  w: .52, d: .34 },
+      { n: 6, len: .30,  w: .52, d: .44 },
+      { n: 5, len: .20,  w: .55, d: .52 },
+    ];
+    const makeFlower = (x, y, R, seed, phase) => {
+      const r = rng(seed), petals = [], leaves = [];
+      const rot0 = r() * TAU;
+      LAYERS.forEach((L, li) => {
+        for (let k = 0; k < L.n; k++) {
+          const len = R * L.len * (.88 + r() * .24);
+          petals.push({
+            li, a: rot0 + li * .41 + k * TAU / L.n + (r() - .5) * .3,
+            len, w: len * L.w * (.9 + r() * .25), d: L.d + r() * .05,
+            ph: r() * TAU, fq: 3 + Math.floor(r() * 3), amp: .025 + r() * .035,
+            sx: r(), sy: r(), ss: r()
+          });
+        }
+      });
+      return { x, y, R, petals, phase, period: 11, tilt: .78 + r() * .1 };
+    };
+    const layout = () => {
+      const rect = cv.getBoundingClientRect();
+      W = rect.width; H = rect.height; dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+      const n = W < 560 ? 4 : W < 1000 ? 5 : 7;
+      const r = rng(7);
+      flowers = [];
+      for (let i = 0; i < n; i++) {
+        const R = Math.min(H * (.34 + r() * .14), W / n * .95);
+        const x = (i + .5) / n * W + (r() - .5) * W / n * .3;
+        const y = H * (.5 + (r() - .5) * .14);
+        flowers.push(makeFlower(x, y, R, 101 + i * 37, (i * .618) % 1));
+      }
+      flowers.sort((a, b) => a.R - b.R);   // smaller ones sit behind
+    };
+    const openness = (f, t) => {
+      if (reduce) return 1;
+      const c = ((t / f.period) + f.phase) % 1;
+      const LOW = .32;
+      if (c < .38) return LOW + (1 - LOW) * eio(c / .38);
+      if (c < .62) return 1;
+      if (c < .92) return 1 - (1 - LOW) * eio((c - .62) / .30);
+      return LOW;
+    };
+    const petalPath = (len, w, p) => {
+      const cy = -len * .55, ry = len * .55, M = 56, pts = [];
+      for (let i = 0; i < M; i++) {
+        const t = Math.PI / 2 + i / M * TAU;
+        const st = Math.sin(t), top = Math.pow(Math.max(0, -st), 2);
+        const ruf = 1 + p.amp * top * Math.sin(p.fq * t + p.ph);
+        const pinch = 1 - .62 * Math.pow(Math.max(0, st), 1.6);
+        pts.push([w * Math.cos(t) * pinch * ruf, cy + ry * st * (st < 0 ? ruf : 1)]);
+      }
+      ctx.beginPath();
+      const mid = (i) => { const a = pts[i % M], b = pts[(i + 1) % M]; return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; };
+      let m = mid(M - 1); ctx.moveTo(m[0], m[1]);
+      for (let i = 0; i < M; i++) { const q = pts[i], n = mid(i); ctx.quadraticCurveTo(q[0], q[1], n[0], n[1]); }
+      ctx.closePath();
+    };
+    const drawFlower = (f, t) => {
+      const o = openness(f, t);
+      ctx.save();
+      ctx.translate(f.x, f.y);
+      ctx.scale(1, f.tilt);
+      let glowDone = false;
+      for (const p of f.petals) {
+        if (!glowDone && p.li >= 3) {
+          glowDone = true;
+          const gr = ctx.createRadialGradient(0, 0, 0, 0, 0, f.R * .42);
+          gr.addColorStop(0, 'rgba(247,196,160,.75)'); gr.addColorStop(1, 'rgba(247,196,160,0)');
+          ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(0, 0, f.R * .42, 0, TAU); ctx.fill();
+        }
+        const pk = clamp((o - p.d * .8) / (1 - p.d * .8));
+        const cupped = p.li >= 5 ? .6 : 1;            // the innermost petals stay cupped
+        const len = p.len * (.3 + .7 * pk * cupped + (p.li >= 5 ? .2 : 0));
+        const w = p.w * (.5 + .5 * pk);
+        if (len < 2) continue;
+        ctx.save();
+        ctx.rotate(p.a + (1 - pk) * .55 + Math.sin(t * .9 + p.ph) * .012 * pk);
+        // soft shadow under the petal
+        ctx.save(); ctx.translate(1, 4); petalPath(len, w, p); ctx.fillStyle = 'rgba(138,74,82,.12)'; ctx.fill(); ctx.restore();
+        petalPath(len, w, p);
+        ctx.fillStyle = '#F8EBE6'; ctx.fill();
+        ctx.save();
+        ctx.clip();
+        if (tex) {
+          const sw = tex.width * (.18 + .14 * p.ss);
+          const sh = Math.min(tex.height * .9, sw * len / (2 * w));
+          ctx.globalAlpha = .82;
+          ctx.drawImage(tex, p.sx * (tex.width - sw), p.sy * (tex.height - sh), sw, sh, -w * 1.05, -len * 1.02, w * 2.1, len * 1.04);
+          ctx.globalAlpha = 1;
+        }
+        const sg = ctx.createLinearGradient(0, 0, 0, -len);
+        sg.addColorStop(0, 'rgba(222,150,140,.42)');
+        sg.addColorStop(.45, 'rgba(240,190,180,.08)');
+        sg.addColorStop(1, 'rgba(255,255,255,.22)');
+        ctx.fillStyle = sg; ctx.fillRect(-w * 1.1, -len * 1.05, w * 2.2, len * 1.1);
+        ctx.restore();
+        ctx.lineWidth = .8; ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.stroke();
+        ctx.restore();
+      }
+      ctx.restore();
+    };
+    const render = (t) => {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      flowers.forEach(f => drawFlower(f, t));
+    };
+    let visible = false, lastDraw = 0;
+    const loop = (now) => {
+      if (!visible) return;
+      if (now - lastDraw > 33) { lastDraw = now; render(now / 1000); }   // ~30fps is plenty for a slow bloom
+      requestAnimationFrame(loop);
+    };
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement('canvas');
+      const s = Math.min(1, 1100 / img.width);
+      c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+      const cx = c.getContext('2d');
+      cx.filter = 'blur(1.2px)'; cx.drawImage(img, 0, 0, c.width, c.height); cx.filter = 'none';
+      cx.fillStyle = 'rgba(252,236,228,.28)'; cx.fillRect(0, 0, c.width, c.height);
+      tex = c; render(performance.now() / 1000);
+    };
+    img.src = 'assets/peony.jpg';
+    layout(); render(reduce ? 0 : 4);
+    let rw = W;
+    window.addEventListener('resize', () => { if (Math.abs(cv.getBoundingClientRect().width - rw) > 2) { layout(); rw = W; render(performance.now() / 1000); } });
+    if (reduce) return;
+    new IntersectionObserver(([e]) => { const was = visible; visible = e.isIntersecting; if (visible && !was) requestAnimationFrame(loop); }).observe(cv);
+  })();
+
+  // Mobile menu
+  const btn = document.getElementById('menu-btn');
+  const links = document.getElementById('nav-links');
+  const setOpen = (open) => {
+    btn.setAttribute('aria-expanded', open);
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    links.dataset.open = open;
+  };
+  btn.addEventListener('click', () => setOpen(btn.getAttribute('aria-expanded') !== 'true'));
+  links.addEventListener('click', (e) => { if (e.target.closest('a')) setOpen(false); });
+
+  // Simple page routing: #volunteer shows the Volunteer page, everything else is Home
+  const views = { home: document.querySelector('[data-view="home"]'), volunteer: document.querySelector('[data-view="volunteer"]') };
+  const navLinks = [...links.querySelectorAll('a')];
+  const route = () => {
+    const h = location.hash.slice(1);
+    const isVol = h === 'volunteer';
+    views.home.hidden = isVol;
+    views.volunteer.hidden = !isVol;
+    const current = isVol ? 2 : (h === 'about' ? 1 : 0);
+    navLinks.forEach((a, k) => k === current ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+    document.title = isVol ? 'Volunteer · Ladies First Health' : 'Ladies First Health';
+    if (isVol || !h || h === 'top') { window.scrollTo({ top: 0, behavior: 'instant' }); return; }
+    const el = document.getElementById(h);
+    if (el) requestAnimationFrame(() => el.scrollIntoView());
+  };
+  window.addEventListener('hashchange', route);
+  route();
+
+  // Heart links from the settings above
+  const cfg = window.LF_CONFIG || {};
+  const ev = document.getElementById('pop-event'), ig = document.getElementById('pop-insta');
+  if (cfg.eventUrl) { ev.href = cfg.eventUrl; if (/^https?:/.test(cfg.eventUrl)) { ev.target = '_blank'; ev.rel = 'noopener'; } }
+  if (cfg.instagramUrl) ig.href = cfg.instagramUrl;
+
+  // Volunteer form: saves to the Supabase "volunteers" table
+  const form = document.getElementById('volunteer-form');
+  const status = document.getElementById('v-status');
+  const messages = {
+    'first-name': 'Add your first name.',
+    'last-name': 'Add your last name.',
+    'email': 'Add an email we can reach you at, like name@umass.edu.',
+    'year': 'Choose your current year.'
+  };
+  const setError = (field, msg) => {
+    const wrap = field.closest('.field');
+    let err = wrap.querySelector('.err');
+    if (msg) {
+      field.setAttribute('aria-invalid', 'true');
+      if (!err) { err = document.createElement('p'); err.className = 'err'; err.id = field.id + '-err'; wrap.appendChild(err); }
+      err.textContent = msg;
+      field.setAttribute('aria-errormessage', err.id);
+    } else {
+      field.removeAttribute('aria-invalid');
+      if (err) err.remove();
+    }
+  };
+  form.addEventListener('input', (e) => { if (e.target.matches('[aria-invalid="true"]') && e.target.checkValidity()) setError(e.target, ''); });
+  form.addEventListener('change', (e) => { if (e.target.matches('select') && e.target.checkValidity()) setError(e.target, ''); });
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let first = null;
+    form.querySelectorAll('input, select').forEach((f) => {
+      const ok = f.checkValidity() && f.value.trim() !== '';
+      setError(f, ok ? '' : messages[f.id]);
+      if (!ok && !first) first = f;
+    });
+    if (first) { status.hidden = true; first.focus(); return; }
+    const val = (id) => form.querySelector('#' + id).value.trim();
+    const row = { first_name: val('first-name'), last_name: val('last-name'), email: val('email').toLowerCase(), year: val('year') };
+    const say = (msg) => { status.textContent = msg; status.hidden = false; };
+    const configured = cfg.supabaseUrl && !cfg.supabaseUrl.startsWith('YOUR_') && cfg.supabaseKey && !cfg.supabaseKey.startsWith('YOUR_');
+    if (!configured) { say(`Thanks, ${row.first_name}! The sign-up list isn't connected yet, so your details weren't sent.`); return; }
+    const btn = form.querySelector('.v-submit');
+    btn.disabled = true; btn.textContent = 'Signing you up…';
+    const headers = { apikey: cfg.supabaseKey, 'Content-Type': 'application/json', Prefer: 'return=minimal' };
+    if (cfg.supabaseKey.startsWith('eyJ')) headers.Authorization = 'Bearer ' + cfg.supabaseKey;   // legacy anon keys
+    fetch(cfg.supabaseUrl.replace(/\/$/, '') + '/rest/v1/volunteers', { method: 'POST', headers, body: JSON.stringify(row) })
+      .then((res) => {
+        if (res.ok) { form.reset(); say(`You're on the list, ${row.first_name}! We'll email you when there's a shift that fits.`); }
+        else if (res.status === 409) say(`You're already signed up with ${row.email}. We'll be in touch!`);
+        else say("We couldn't save your sign-up just now. Try again in a minute, or message us on Instagram.");
+      })
+      .catch(() => say("We couldn't reach the sign-up list. Check your connection and try again."))
+      .finally(() => { btn.disabled = false; btn.textContent = 'Sign up to volunteer'; });
+  });
+})();
+</script>

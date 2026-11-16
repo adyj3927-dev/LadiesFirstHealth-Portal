@@ -1,28 +1,25 @@
+# Ladies First: Women's Health Collective
 
-Ladies First: Women's Health Collective — Website
-Website and volunteer portal for Ladies First: Women's Health Collective, a student-led women's health club at UMass Amherst.
+Website and volunteer sign-up for Ladies First: Women's Health Collective, a student-led women's health club at UMass Amherst.
 
-Structure
-ladies-first-health/
-├── volunteer-portal/   # Volunteer sign-up page (live now)
-│   └── index.html
-├── supabase/
-│   └── schema.sql      # Database table + security rules
-└── README.md
-The main club website will be added to this repo later.
+## Structure
 
-Volunteer portal setup
-Create a Supabase project.
-Open SQL Editor, paste supabase/schema.sql, and run it.
-Go to Project Settings → API and copy the Project URL and the anon public key.
-Paste both into the top of the <script> in volunteer-portal/index.html.
-Open the page and submit a test sign-up.
-The anon key is safe to commit: Row Level Security only allows inserts, so the public can't read anyone's info. Never commit the service_role key.
+```
+index.html           # The whole site: Home + Volunteer With Us (#volunteer)
+assets/              # Photos, logo artwork, hearts
+supabase/schema.sql  # Volunteer sign-up table + security rules
+```
 
-Viewing sign-ups
-Supabase dashboard → Table Editor → volunteers. Use the export option there to download a CSV for the e-board.
+It's a static site with no build step. Any static host works (Vercel, Netlify, GitHub Pages).
 
-Deploying
-GitHub Pages: repo Settings → Pages, deploy from the main branch. The portal will be at https://<username>.github.io/ladies-first-health/volunteer-portal/.
+## Settings
 
+At the top of the `<script>` in `index.html`, edit `window.LF_CONFIG`:
 
+- `supabaseUrl`, `supabaseKey`: from Supabase → Project Settings → API (use the **anon / publishable** key, never the service_role / secret key)
+- `instagramUrl`: the club Instagram
+- `eventUrl`: where the "Period packing event" heart links
+
+## Viewing sign-ups
+
+Supabase dashboard → Table Editor → `volunteers`. The website can only add rows; it can't read the list.
